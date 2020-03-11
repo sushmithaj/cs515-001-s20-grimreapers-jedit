@@ -354,7 +354,7 @@ public class StatusBar extends JPanel
 
 			int caretPosition = textArea.getCaretPosition();
 			int currLine = textArea.getCaretLine();
-
+			
 			// there must be a better way of fixing this...
 			// the problem is that this method can sometimes
 			// be called as a result of a text area scroll
@@ -370,7 +370,8 @@ public class StatusBar extends JPanel
 				return;
 
 			int bufferLength = buffer.getLength();
-
+			int totalWords = doWordCount(buffer.getText(0,bufferLength)); // Displays the number of words in the file
+			int wordOffset = doWordCount(buffer.getText(0,caretPosition)); // the word offset of the caret from the beginning of the file
 			buffer.getText(start,dot,seg);
 			int virtualPosition = StandardUtilities.getVirtualWidth(seg,
 				buffer.getTabSize());
@@ -397,6 +398,7 @@ public class StatusBar extends JPanel
 			{
 				buf.append(' ');
 			}
+			
 			if (jEdit.getBooleanProperty("view.status.show-caret-offset", true) &&
 				jEdit.getBooleanProperty("view.status.show-caret-bufferlength", true))
 			{
@@ -417,12 +419,68 @@ public class StatusBar extends JPanel
 				buf.append('(');
 				buf.append(bufferLength);
 				buf.append(')');
+				
 			}
+			if (buf.length() > 0)
+			{
+				buf.append(' ');
+			}
+			if (jEdit.getBooleanProperty("view.status.show-caret-wordoffset", true) &&
+					jEdit.getBooleanProperty("view.status.show-caret-totalwords", true))
+				{
+					buf.append('(');
+					buf.append(wordOffset);
+					buf.append('/');
+					buf.append(totalWords);
+					buf.append(')');
+				}
+				else if (jEdit.getBooleanProperty("view.status.show-caret-wordoffset", true))
+				{
+					buf.append('(');
+					buf.append(wordOffset);
+					buf.append(')');
+				}
+				else if (jEdit.getBooleanProperty("view.status.show-caret-totalwords", true))
+				{
+					buf.append('(');
+					buf.append(totalWords);
+					buf.append(')');
+					
+				}
 
 			caretStatus.setText(buf.toString());
 			buf.setLength(0);
 		}
 	} //}}}
+
+	private int doWordCount(String text) {
+		char[] chars = text.toCharArray();
+		int words = 0;
+		int lines = 1;
+
+		boolean word = true;
+		for (char aChar : chars)
+		{
+			switch (aChar)
+			{
+				case '\r':
+				case '\n':
+					lines++;
+				case ' ':
+				case '\t':
+					word = true;
+					break;
+				default:
+					if (word)
+					{
+						words++;
+						word = false;
+					}
+					break;
+			}
+		}
+		return words;
+	}
 
 	//{{{ updateBufferStatus() method
 	public void updateBufferStatus()
@@ -435,6 +493,7 @@ public class StatusBar extends JPanel
 		encodingWidget.update();
 		lockedWidget.update();
 	} //}}}
+	
 
 	//{{{ updateMiscStatus() method
 	public void updateMiscStatus()
@@ -527,3 +586,6 @@ public class StatusBar extends JPanel
 		}
 	} //}}}
 }
+
+
+

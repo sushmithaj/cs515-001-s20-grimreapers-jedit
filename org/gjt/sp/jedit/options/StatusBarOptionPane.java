@@ -129,11 +129,23 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		showCaretBufferLength = new JCheckBox(jEdit.getProperty("options.status.caret.bufferlength", "Show length of file"),
 			jEdit.getBooleanProperty("view.status.show-caret-bufferlength", true));
 		showCaretBufferLength.setName("showCaretBufferLength");
+		showCaretWordOffset = new JCheckBox(jEdit.getProperty("options.status.caret.wordoffset", "Show word offset from start of file"),
+				jEdit.getBooleanProperty("view.status.show-caret-wordoffset", true));
+		showCaretWordOffset.setName("showCaretWordOffset");
+		showCaretTotalWords = new JCheckBox(jEdit.getProperty("options.status.caret.totalwords", "Show total words from start of file"),
+				jEdit.getBooleanProperty("view.status.show-caret-totalwords", true));
+		showCaretTotalWords.setName("showCaretTotalWords");
+		
 		optionsPanel.addComponent(showCaretLineNumber);
 		optionsPanel.addComponent(showCaretDot);
 		optionsPanel.addComponent(showCaretVirtual);
 		optionsPanel.addComponent(showCaretOffset);
 		optionsPanel.addComponent(showCaretBufferLength);
+		optionsPanel.addComponent(showCaretWordOffset);
+		optionsPanel.addComponent(showCaretTotalWords);
+
+		
+
 
 		//}}}
 
@@ -237,6 +249,10 @@ public class StatusBarOptionPane extends AbstractOptionPane
 		jEdit.setBooleanProperty("view.status.show-caret-virtual", showCaretVirtual.isSelected());
 		jEdit.setBooleanProperty("view.status.show-caret-offset", showCaretOffset.isSelected());
 		jEdit.setBooleanProperty("view.status.show-caret-bufferlength", showCaretBufferLength.isSelected());
+		jEdit.setBooleanProperty("view.status.show-caret-wordoffset", showCaretWordOffset.isSelected());
+		jEdit.setBooleanProperty("view.status.show-caret-totalwords", showCaretTotalWords.isSelected());
+
+		
 
 	} //}}}
 
@@ -262,6 +278,8 @@ public class StatusBarOptionPane extends AbstractOptionPane
 	private JCheckBox showCaretVirtual;
 	private JCheckBox showCaretOffset;
 	private JCheckBox showCaretBufferLength;
+	private JCheckBox showCaretWordOffset;
+	private JCheckBox showCaretTotalWords;
 	//}}}
 
 	//{{{ updateButtons() method
@@ -586,4 +604,5 @@ public class StatusBarOptionPane extends AbstractOptionPane
 	} //}}}
 
 }
+
 
