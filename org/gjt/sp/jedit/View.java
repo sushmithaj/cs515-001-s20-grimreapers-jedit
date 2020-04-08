@@ -143,6 +143,7 @@ public class View extends JFrame implements InputHandlerProvider
 
 	//{{{ ToolBar-related constants
 
+	private SetViewTitle setViewTitle = new SetViewTitle();
 	public static final String VIEW_DOCKING_FRAMEWORK_PROPERTY = "view.docking.framework";
 	private static final String ORIGINAL_DOCKING_FRAMEWORK = "Original";
 	public static final String DOCKING_FRAMEWORK_PROVIDER_SERVICE =
@@ -1094,7 +1095,7 @@ public class View extends JFrame implements InputHandlerProvider
 		config.splitConfig = getSplitConfig();
 		config.extState = getExtendedState();
 		config.docking = dockableWindowManager.getDockingLayout(config);
-		config.title = userTitle;
+		config.title = setViewTitle.getUserTitle();
 		String prefix = config.plainView ? "plain-view" : "view";
 		switch (config.extState)
 		{
@@ -1237,8 +1238,8 @@ public class View extends JFrame implements InputHandlerProvider
 		title bar. */
 		if(!OperatingSystem.isMacOS())
 		{
-			if (userTitle != null)
-				title.append(userTitle);
+			if (setViewTitle.getUserTitle() != null)
+				title.append(setViewTitle.getUserTitle());
 			else
 				title.append(jEdit.getProperty("view.title"));
 		}
@@ -1264,8 +1265,7 @@ public class View extends JFrame implements InputHandlerProvider
 	 */
 	public void setUserTitle(String title)
 	{
-		userTitle = title + " - ";
-		updateTitle();
+		setViewTitle.setUserTitle(title, this);
 	} //}}}
 
 	//{{{ showUserTitleDialog() method
@@ -1274,11 +1274,7 @@ public class View extends JFrame implements InputHandlerProvider
 	 */
 	public void showUserTitleDialog()
 	{
-		String title = JOptionPane.showInputDialog(this, jEdit.getProperty(
-			"view.title.select"));
-		if (title == null)
-			return;
-		setUserTitle(title);
+		setViewTitle.showUserTitleDialog(this);
 	} //}}}
 
 	//{{{ getPrefixFocusOwner() method
@@ -1340,7 +1336,7 @@ public class View extends JFrame implements InputHandlerProvider
 		mainPanel.setLayout(new BorderLayout());
 		dockableWindowManager = getDockingFrameworkProvider().create(this,
 			DockableWindowFactory.getInstance(), config);
-		userTitle = config.title;
+		setViewTitle.setUserTitle2(config.title);
 		dockableWindowManager.setMainPanel(mainPanel);
 
 		topToolBars = new JPanel(new VariableGridLayout(
@@ -1573,9 +1569,6 @@ public class View extends JFrame implements InputHandlerProvider
 	private boolean fullScreenMode;
 	private Rectangle windowedBounds;
 	private JMenuBar menuBar;
-	private String userTitle;
-	//}}}
-
 	//{{{ setMainContent() method
 	private void setMainContent(Component c)
 	{
@@ -2351,3 +2344,4 @@ loop:		while (true)
 	 //}}}
 
 }
+
