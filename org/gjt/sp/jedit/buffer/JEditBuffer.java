@@ -3011,4 +3011,19 @@ loop:		for(int i = 0; i < seg.count; i++)
 	}
 	 //}}}
 //}}}
+
+// Added for A-4- Refactoring of Feature Envy Code Smell
+	/**
+	 * Join a line with the next line. If you use this method you have to lock the buffer in compound edit mode.
+	 * @param line  the line number that will be joined with the next line
+	 */
+	public void joinLineAt(int line) {
+		if (line >= getLineCount() - 1)
+			return;
+		int end = getLineEndOffset(line);
+		CharSequence nextLineText = getLineSegment(line + 1);
+		remove(end - 1, StandardUtilities.getLeadingWhiteSpace(nextLineText) + 1);
+		if (nextLineText.length() != 0)
+			insert(end - 1, " ");
+	}
 }
