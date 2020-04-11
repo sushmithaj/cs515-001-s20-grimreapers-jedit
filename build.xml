@@ -316,7 +316,6 @@
 			<compilerarg line="${config.build.compilerarg}"/>
 		</javac>
 	</target>
-
 	<target name="prepare-textArea"
 		depends="init">
 		<delete includeemptydirs="true"
@@ -503,7 +502,6 @@
 		<fail message="Unit test(s) failed! See reports at ${build.dir}/test/reports/index.html"
 		      if="tests.failed"/>
 	</target>
-
 	<target name="build"
 		depends="init,retrieve,setup,compile,test"
 		description="build the jEdit JAR-file with full debug-information">
