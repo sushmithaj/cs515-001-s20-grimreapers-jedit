@@ -94,6 +94,7 @@
 		<dependency org="org.evosuite" name="evosuite-runtime" rev="1.0.6"/>
 		<dependency org="org.evosuite" name="evosuite-standalone-runtime" rev="1.0.6"/>
 		<dependency org="org.evosuite" name="evosuite" rev="1.0.6">
+		
     <artifact name="evosuite" type="pom" ext="pom"/>
 </dependency>
 		

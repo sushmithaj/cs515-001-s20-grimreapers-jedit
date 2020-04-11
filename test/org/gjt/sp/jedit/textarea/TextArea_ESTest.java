@@ -25,7 +25,7 @@ public class TextArea_ESTest extends TextArea_ESTest_scaffolding {
       try { 
         TextArea.showPopupMenu((JPopupMenu) null, (Component) null, 0, 0, true);
         fail("Expecting exception: NullPointerException");
-      
+
       } catch(NullPointerException e) {
          //
          // no message in exception (getMessage() returned null)

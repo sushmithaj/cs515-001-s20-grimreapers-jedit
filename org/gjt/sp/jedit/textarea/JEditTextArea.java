@@ -31,7 +31,7 @@ import java.awt.event.MouseEvent;
 import java.util.regex.Pattern;
 
 import javax.swing.JMenuItem;
-
+import javax.swing.UIManager;
 import org.gjt.sp.jedit.Abbrevs;
 import org.gjt.sp.jedit.EditBus;
 import org.gjt.sp.jedit.EditBus.EBHandler;
@@ -223,23 +223,12 @@ public class JEditTextArea extends TextArea
 	 * Also sends PositionChanging if it goes somewhere.
 	 * @since jEdit 4.3pre18
 	 */
+	// A4_ Duplicated Code Refactoring
 	public void goToMatchingBracket()
 	{
-		if(getLineLength(caretLine) != 0)
-		{
-			int dot = caret - getLineStartOffset(caretLine);
-
-			int bracket = TextUtilities.findMatchingBracket(
-				buffer,caretLine,Math.max(0,dot - 1));
-			if(bracket != -1)
-			{
-				EditBus.send(new PositionChanging(this));
-				selectNone();
-				moveCaretPosition(bracket + 1,false);
-				return;
-			}
-		}
-		javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
+		goToMatchingBracketExtracted(() -> {
+			EditBus.send(new PositionChanging(this));
+		}); 
 	} //}}}
 
 

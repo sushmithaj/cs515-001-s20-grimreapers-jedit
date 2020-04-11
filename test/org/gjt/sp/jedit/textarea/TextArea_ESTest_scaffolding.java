@@ -72,7 +72,7 @@ public class TextArea_ESTest_scaffolding {
   } 
 
   public static void setSystemProperties() {
- 
+
     java.lang.System.setProperties((java.util.Properties) defaultProperties.clone()); 
     java.lang.System.setProperty("file.encoding", "UTF-8"); 
     java.lang.System.setProperty("java.awt.headless", "true"); 

@@ -57,6 +57,7 @@ import org.gjt.sp.jedit.input.TextAreaInputHandler;
 import org.gjt.sp.jedit.syntax.Chunk;
 import org.gjt.sp.jedit.syntax.DefaultTokenHandler;
 import org.gjt.sp.jedit.syntax.Token;
+import org.gjt.sp.jedit.textarea.TextArea;
 import org.gjt.sp.util.GenericGUIUtilities;
 import org.gjt.sp.util.Log;
 import org.gjt.sp.util.StandardUtilities;
@@ -3358,21 +3359,8 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 	 */
 	public void goToMatchingBracket()
 	{
-		if(getLineLength(caretLine) != 0)
-		{
-			int dot = caret - getLineStartOffset(caretLine);
-
-			int bracket = TextUtilities.findMatchingBracket(
-				buffer,caretLine,Math.max(0,dot - 1));
-			if(bracket != -1)
-			{
-				selectNone();
-				moveCaretPosition(bracket + 1,false);
-				return;
-			}
-		}
-
-		javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null); 
+		goToMatchingBracketExtracted(() -> {
+		}); 
 	} //}}}
 
 	//}}}
@@ -6724,5 +6712,25 @@ loop:		for(int i = lineNo - 1; i >= 0; i--)
 		{
 			return painter;
 		}
+	}
+	/**  Moves the caret to the bracket matching the one before the caret.
+	 Created for A4_ Refactoring**/
+	
+	@FunctionalInterface
+	protected interface goToMatchingBracketInterface {
+		void apply();
+	}
+	protected void goToMatchingBracketExtracted(goToMatchingBracketInterface positionChange) {
+		if (getLineLength(caretLine) != 0) {
+			int dot = caret - getLineStartOffset(caretLine);
+			int bracket = TextUtilities.findMatchingBracket(buffer, caretLine, Math.max(0, dot - 1));
+			if (bracket != -1) {
+				positionChange.apply();
+				selectNone();
+				moveCaretPosition(bracket + 1, false);
+				return;
+			}
+		}
+		javax.swing.UIManager.getLookAndFeel().provideErrorFeedback(null);
 	}
 }
