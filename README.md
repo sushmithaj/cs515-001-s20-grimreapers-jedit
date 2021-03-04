@@ -1,4 +1,4 @@
-# cs515-001-s20-grimreapers-jedit
+# cs515-jedit
 
 
 
